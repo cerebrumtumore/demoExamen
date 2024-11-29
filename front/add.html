@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Добавление заявки</title>
+
+</head>
+<body>
+
+<h1>Добавление новой заявки</h1>
+
+<form id="orderForm">
+  <label for="number">Номер:</label>
+  <input type="number" id="number" required><br>
+
+  <label for="startDate">Дата:</label>
+  <input type="date" id="startDate" required><br>
+
+  <label for="typeTechnic">Тип техники:</label>
+  <input type="text" id="typeTechnic" required><br>
+
+  <label for="model">Модель:</label>
+  <input type="text" id="model" required><br>
+
+  <label for="descriptionProblem">Описание проблемы:</label>
+  <textarea id="descriptionProblem" rows="4" required></textarea><br>
+
+  <label for="client">Клиент:</label>
+  <input type="text" id="client" required><br>
+
+  <label for="numberPhone">Телефон:</label>
+  <input type="tel" id="numberPhone" required><br>
+
+  <label for="master">Мастер:</label>
+  <input type="text" id="master"><br>
+
+  <button type="submit">Добавить заявку</button>
+</form>
+<br>
+<a href="index.html">Список заявок</a>
+
+<script>
+document.getElementById('orderForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const orderData = {
+    number: parseInt(document.getElementById('number').value),
+    startDate: document.getElementById('startDate').value,
+    typeTechnic: document.getElementById('typeTechnic').value,
+    model: document.getElementById('model').value,
+    descriptionProblem: document.getElementById('descriptionProblem').value,
+    client: document.getElementById('client').value,
+    numberPhone: document.getElementById('numberPhone').value,
+    status: "В процессе", 
+    master: document.getElementById('master').value || "Не назначен"
+  };
+
+    const response = await fetch('https://localhost:7260/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert(`Ошибка добавления заявки: ${errorData.message || response.statusText}`);
+    } else {
+      alert('Заявка успешно добавлена!');
+      
+    }
+});
+</script>

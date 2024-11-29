@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Display</title>
+<style>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+</style>
+</head>
+<body>
+
+<h1>Заявки</h1>
+
+<table id="orderTable">
+  <thead>
+    <tr>
+      <th>Номер</th>
+      <th>Дата</th>
+      <th>Тип техники</th>
+      <th>Модель</th>
+      <th>Проблема</th>
+      <th>Клиент</th>
+      <th>Телефон</th>
+      <th>Статус</th>
+      <th>Мастер</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+<br>
+<a href="add.html">Добавить заявку</a><br>
+
+<a href="findByNum.html">Найти по номеру</a>
+
+<script>
+    async function fetchOrders() {
+    const response = await fetch('https://localhost:7260', {method:"GET"});
+    const orders = await response.json();
+    displayOrders(orders);
+}
+
+function displayOrders(orders) {
+  const tbody = document.getElementById('orderTable').querySelector('tbody');
+  tbody.innerHTML = ''; 
+
+  orders.forEach(order => {
+    const row = tbody.insertRow();
+    row.insertCell().textContent = order.number;
+    row.insertCell().textContent = order.startDate;
+    row.insertCell().textContent = order.typeTechnic;
+    row.insertCell().textContent = order.model;
+    row.insertCell().textContent = order.descriptionProblem;
+    row.insertCell().textContent = order.client;
+    row.insertCell().textContent = order.numberPhone;
+    row.insertCell().textContent = order.status;
+    row.insertCell().textContent = order.master;
+  });
+}
+
+fetchOrders();
+</script>
+</body>
+</html>

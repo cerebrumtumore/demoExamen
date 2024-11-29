@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Обновление заявки</title>
+</head>
+<body>
+
+<h1>Обновление заявки</h1>
+
+<form id="updateForm">
+  <label for="orderNumber">Номер заявки:</label>
+  <input type="number" id="orderNumber" required>
+
+  <label for="status">Статус:</label>
+  <select id="status">
+    <option value="В процессе">В процессе</option>
+    <option value="Завершено">Завершено</option>
+    <option value="В Ожиданни запчастей">В ожидании запчастей</option>
+  </select>
+
+
+  <label for="description">Описание проблемы:</label>
+  <textarea id="description" rows="4"></textarea>
+
+  <label for="master">Мастер:</label>
+  <input type="text" id="master">
+
+  <label for="comment">Комментарий:</label>
+  <textarea id="comment" rows="4"></textarea>
+
+  <button type="submit">Обновить заявку</button>
+</form>
+
+<script>
+  const orderNumberInput = document.getElementById('orderNumber');
+  const updateForm = document.getElementById('updateForm');
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const orderNumber = urlParams.get('num');
+  if (orderNumber) {
+    orderNumberInput.value = orderNumber;
+  }
+
+  updateForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const orderNumber = document.getElementById('orderNumber').value;
+    const updateData = {
+      status: document.getElementById('status').value,
+      description: document.getElementById('description').value,
+      master: document.getElementById('master').value,
+      comment: document.getElementById('comment').value
+    };
+
+      const response = await fetch(`https://localhost:7260/${orderNumber}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Ошибка обновления заявки: ${errorData.message || response.statusText}`);
+      } else {
+        alert('Заявка успешно обновлена!');
+      }
+    
+  });
+
+</script>
+
+</body>
+</html>
+
+
